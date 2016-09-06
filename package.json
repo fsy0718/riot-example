@@ -1,0 +1,19 @@
+{
+  "name": "riot-example",
+  "version": "0.0.1",
+  "description": "riot example",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@10.1.249.43:FANSHAOYONG/riot-example.git"
+  },
+  "keywords": [
+    "riot",
+    "redux"
+  ],
+  "author": "fanshaoyong <fanshaoyong@huazhu.com>",
+  "license": "MIT"
+}
