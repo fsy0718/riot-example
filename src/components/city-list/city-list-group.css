@@ -1,0 +1,29 @@
+@import '../../common/css/common.css';
+
+[riot-tag="city-list-group"]{
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  overflow: auto;
+  right: 0;
+}
+[riot-tag="city-list-group"] a{
+  text-decoration: none;
+  display: block;
+  color: gray;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  transform: scale(1);
+}
+[riot-tag="city-list-group"] a:hover{
+  transform: scale(1.1);
+  transform-origin: center center;
+}
+
+[riot-tag="city-list-group"] a.active{
+  background: purple;
+  color: white;
+  border-radius: 50%;
+}

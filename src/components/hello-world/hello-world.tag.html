@@ -1,0 +1,14 @@
+<hello-world>
+  <h1>{this.opts.store.getState().title}</h1>
+  <button type="button" name="button" onclick="{changeTitle}">变化</button>
+  <script>
+    var tag = this;
+    var datas = ['星期一','星期二','星期三','星期四','星期五','星期六', '星期日']
+    tag.changeTitle = function(){
+      tag.opts.store.dispatch({
+        type: 'CHANGE_TITLE',
+        data: datas[Math.ceil(Math.random() * 6)]
+      });
+    }
+  </script>
+</hello-world>

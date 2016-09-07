@@ -1,0 +1,9 @@
+ul{
+  list-style: outside none;
+}
+body, ul, dl, dd{
+  margin: 0;
+}
+dd, ul{
+  padding: 0;
+}

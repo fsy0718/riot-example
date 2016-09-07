@@ -1,0 +1,43 @@
+require('./city-list-group.css');
+<city-list-group>
+  <ul if={cityGroupIndexs.length}>
+    <li each={group, index in cityGroupIndexs}>
+      <a href="javascript:;" onclick={handleClick} class={getActiveGroupIndex() === group && 'active'} >{group}</a>
+    </li>
+  </ul>
+  <script>
+    var tag = this;
+    var store = tag.opts.store;
+    var storeData = store.getState();
+    var unsubscribe = null;
+
+    tag.handleClick = function(e){
+      if(e.item.group !== tag.getActiveGroupIndex()){
+        store.dispatch({
+          type: 'CHANGE_ACTIVE_GROUP',
+          activeGroup: e.item.group
+        })
+      }
+      e.preventUpdate = false;
+      
+    }
+
+    tag.cityGroupIndexs = storeData.cityGroupIndexs || [];
+
+    tag.getActiveGroupIndex = function(){
+      //每次都从store中获取，不能缓存
+      return store.getState().actionGroupIndex || tag.cityGroupIndexs[0];
+    } 
+    tag.on('before-mount', function(){
+      unsubscribe = store.subscribe(function(){
+        if(tag.getActiveGroupIndex() !== tag.activeGroupIndex){
+          tag.update();
+        }
+      })
+    });
+    tag.on('before-unmount', function(){
+      unsubscribe();
+    });
+
+  </script>
+</city-list-group>

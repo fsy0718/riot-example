@@ -1,0 +1,36 @@
+<city-list>
+  <dl>
+    <virtual each={citys, index in cityGroups}>
+    <dt if={citys.citys.length}>{citys.index}</dt>
+    <dd if={citys.citys.length}>
+      <ul>
+        <li onclick={handleClick} each={city, index in citys.citys}>{city.CityName}</li>
+      </ul>
+    </dd>
+    </virtual>
+  </dl>
+  <script>
+    var tag = this;
+    var store = tag.opts.store;
+    var storeData = store.getState();
+    tag.cityGroups = storeData.cityGroups || [];
+
+    tag.handleClick = function(e){
+      var activeGroup = e.item.city.Group;
+      if(store.getState().activeGroupIndex !== activeGroup){
+      store.dispatch({
+        type: 'CHANGE_ACTIVE_GROUP',
+        activeGroup: activeGroup
+      });
+      }
+
+      e.preventUpdate = true;
+    }
+
+    tag.on('before-mount', function(){
+      $(window).on('scroll', function(){
+        console.log(1)
+      })
+    })
+  </script>
+</city-list>
