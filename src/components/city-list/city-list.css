@@ -1,0 +1,24 @@
+@import "../../common/css/common.css";
+
+[riot-tag="city-list"]{
+  width: 90%;
+}
+[riot-tag="city-list"] dl{
+  width: 100%;
+  background: rgba(0,0,0,0.01);
+  padding: 1.5em;
+  box-sizing: border-box;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+[riot-tag="city-list"] dl dt,[riot-tag="city-list"] dl dd{
+  line-height: 1.5;
+
+}
+[riot-tag="city-list"] dt{
+  border-bottom: solid 1px rgba(0,0,0,0.2);
+  padding-left: 1.5em;
+}
+[riot-tag="city-list"] dd li{
+  border-bottom: solid 1px rgba(0,0,0,0.2);
+  padding-left: 1.5em;
+}

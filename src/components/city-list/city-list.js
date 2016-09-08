@@ -36,7 +36,7 @@ var cityGroupReducer = function(state = cityGroups, action){
 
 
 
-var reducer = redux.combineReducers({actionGroupIndex: changeActiveGroupReducer, cityGroupIndexs: cityGroupIndexsReducer, cityGroups: cityGroupReducer});
+var reducer = redux.combineReducers({activeGroupIndex: changeActiveGroupReducer, cityGroupIndexs: cityGroupIndexsReducer, cityGroups: cityGroupReducer});
 
 
 //创建一个加载city-list-group的容器元素
@@ -47,7 +47,8 @@ var store = redux.createStore(reducer);
 
 
 riot.mount(document.querySelector('.app'),'city-list', {
-  store
+  store,
+  autoScrollGroupIndex: true
 });
 
 riot.mount(citylistGroupEl[0], 'city-list-group', {

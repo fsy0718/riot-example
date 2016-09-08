@@ -1,3 +1,5 @@
+require('./city-list.css');
+
 <city-list>
   <dl>
     <virtual each={citys, index in cityGroups}>
@@ -13,11 +15,52 @@
     var tag = this;
     var store = tag.opts.store;
     var storeData = store.getState();
+    var unsubscribe = null;
     tag.cityGroups = storeData.cityGroups || [];
+    var activeGroupIndex = storeData.activeGroupIndex;
+    var listRect = null;
+    var groupIndexHeight = 0;
+    var groupItemHeight = 0;
+    var groupItemsHeightMap = [];
+    var calcGroupHeight = function(defaultHeight){
+      var h = defaultHeight || 0;
+      tag.cityGroups.forEach(function(cityGroup){
+        var cityOffsetData = {};
+        var _h = groupIndexHeight + cityGroup.citys.length * groupItemHeight;
+        cityOffsetData.index = cityGroup.index;
+        cityOffsetData.value = h;
+        cityOffsetData.height = _h;
+        h += _h;
+        groupItemsHeightMap.push(cityOffsetData);
+      })
+    }
+
+    var getCurrentGroupIndex = function(value){
+      var i = 0, len = groupItemsHeightMap.length;
+      while(i < len){
+        if(groupItemsHeightMap[i].value > value){
+          var _i = i == 0 ? 0 : i - 1;
+          return groupItemsHeightMap[_i].index
+        }
+        i++;
+      }
+      return null;
+    }
+
+    var getGroupIndexPosHeight = function(groupIndex){
+      var i = 0, len = groupItemsHeightMap.length;
+      while(i < len){
+        if(groupItemsHeightMap[i].index === groupIndex){
+          return groupItemsHeightMap[i].value;
+        }
+        i++
+      }
+      return 0;
+    }
 
     tag.handleClick = function(e){
       var activeGroup = e.item.city.Group;
-      if(store.getState().activeGroupIndex !== activeGroup){
+      if(activeGroupIndex !== activeGroup){
       store.dispatch({
         type: 'CHANGE_ACTIVE_GROUP',
         activeGroup: activeGroup
@@ -26,11 +69,57 @@
 
       e.preventUpdate = true;
     }
+    tag.getActiveGroupIndex = function(){
+      return store.getState().activeGroupIndex;
+    }
 
     tag.on('before-mount', function(){
-      $(window).on('scroll', function(){
-        console.log(1)
-      })
+      unsubscribe = store.subscribe(function(){
+        if(tag.getActiveGroupIndex() !== activeGroupIndex ){
+          activeGroupIndex = tag.getActiveGroupIndex();
+          //var _top = getGroupIndexPosHeight(activeGroupIndex);
+          //$(window).scrollTop(_top);
+        }
+      });
     })
+    tag.on('before-unmount', function(){
+      unsubscribe();
+    })
+
+    if(tag.opts.autoScrollGroupIndex){
+      var timer = null;
+      var scrollHandler = function(){
+        scrolling = true;
+        clearTimeout(timer);
+        timer = setTimeout(function(){
+          var _listRect = tag.root.getBoundingClientRect();
+          var _top = listRect.top - _listRect.top;
+          var groupIndex = getCurrentGroupIndex(_top);
+          if(groupIndex !== tag.getActiveGroupIndex()){
+            store.dispatch({
+              type: 'CHANGE_ACTIVE_GROUP',
+              activeGroup: groupIndex
+            });
+            
+          }
+          clearTimeout(timer);
+        },30)
+
+      }
+      tag.on('mount', function(){
+        listRect = tag.root.getBoundingClientRect();
+        groupIndexHeight = $(tag.root).find('dt').height();
+        groupItemHeight = $(tag.root).find('dd li').height();
+        var t = (parseFloat($(tag.root).find('dl').css('padding-top')) || 0) + listRect.top;
+        calcGroupHeight(t);
+      })
+      tag.on('before-mount', function(){
+        $(window).on('scroll', scrollHandler);
+      })
+      tag.on('before-unmount', function(){
+        $(window).off('scroll', scrollHandler);
+      })
+    }
+
   </script>
 </city-list>

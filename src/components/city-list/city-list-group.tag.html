@@ -10,6 +10,7 @@ require('./city-list-group.css');
     var store = tag.opts.store;
     var storeData = store.getState();
     var unsubscribe = null;
+    var activeGroupIndex = store.activeGroupIndex;
 
     tag.handleClick = function(e){
       if(e.item.group !== tag.getActiveGroupIndex()){
@@ -23,15 +24,15 @@ require('./city-list-group.css');
     }
 
     tag.cityGroupIndexs = storeData.cityGroupIndexs || [];
-
     tag.getActiveGroupIndex = function(){
       //每次都从store中获取，不能缓存
-      return store.getState().actionGroupIndex || tag.cityGroupIndexs[0];
+      return store.getState().activeGroupIndex;
     } 
     tag.on('before-mount', function(){
       unsubscribe = store.subscribe(function(){
-        if(tag.getActiveGroupIndex() !== tag.activeGroupIndex){
+        if(tag.getActiveGroupIndex() !== activeGroupIndex){
           tag.update();
+          activeGroupIndex = tag.getActiveGroupIndex();
         }
       })
     });
