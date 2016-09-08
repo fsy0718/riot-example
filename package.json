@@ -25,8 +25,11 @@
     "extract-text-webpack-plugin": "^1.0.1",
     "html-webpack-plugin": "^2.22.0",
     "json-loader": "^0.5.4",
+    "redux": "^3.6.0",
+    "riot": "^2.6.1",
     "style-loader": "^0.13.1",
     "tag-loader": "^0.3.0",
+    "underscore": "^1.8.3",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.15.1",
     "webpack-zepto": "0.0.1"
@@ -35,5 +38,10 @@
     "redux": "^3.6.0",
     "redux-thunk": "^2.1.0",
     "riot": "^2.6.1"
+  },
+  "dependencies": {
+    "redux": "^3.6.0",
+    "riot": "^2.6.1",
+    "underscore": "^1.8.3"
   }
 }
