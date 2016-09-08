@@ -2,7 +2,8 @@
  `npm install`
 
 ## 运行
-  `npm run dev`
+- `npm run dev`
+- 打开 [http://localhost:8000/](http://localhost:8000/)
 
 ## 参考资料
 - riot参考资料
