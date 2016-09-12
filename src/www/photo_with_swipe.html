@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>swipe的相册</title>
+    <link rel="stylesheet" href="./swiper/swiper.css">
+    <style>
+        body {
+            background: #fff;
+            font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            color:#000;
+            margin: 0;
+            padding: 0;
+        }
+        .swiper-container {
+            width: 100%;
+            padding-top: 50px;
+            padding-bottom: 50px;
+        }
+        .swiper-slide {
+            background-position: center;
+            background-size: cover;
+            width: 300px;
+            height: 300px;
+        }
+    </style>
+</head>
+<body>
+<div class="swiper-container">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide" style="background:lightblue"></div>
+        <div class="swiper-slide" style="background: antiquewhite"></div>
+        <div class="swiper-slide" style="background: mediumaquamarine"></div>
+        <div class="swiper-slide" style="background: saddlebrown"></div>
+        <div class="swiper-slide" style="background: darkcyan"></div>
+        <div class="swiper-slide" style="background: lightyellow"></div>
+        <div class="swiper-slide" style="background: rgba(0,118,255,0.5)"></div>
+        <div class="swiper-slide" style="background: lightcoral"></div>
+    </div>
+    <!-- Add Pagination -->
+    <div class="swiper-pagination"></div>
+</div>
+<div class="swiper-container">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide" style="background:lightblue"></div>
+        <div class="swiper-slide" style="background: antiquewhite"></div>
+        <div class="swiper-slide" style="background: mediumaquamarine"></div>
+        <div class="swiper-slide" style="background: saddlebrown"></div>
+        <div class="swiper-slide" style="background: darkcyan"></div>
+        <div class="swiper-slide" style="background: lightyellow"></div>
+        <div class="swiper-slide" style="background: rgba(0,118,255,0.5)"></div>
+        <div class="swiper-slide" style="background: lightcoral"></div>
+    </div>
+    <!-- Add Pagination -->
+    <div class="swiper-pagination"></div>
+</div>
+<script src="./swiper/swiper.js"></script>
+<script>
+    var containers = document.querySelectorAll('.swiper-container')
+    var swiper1 = new Swiper(containers[0], {
+        pagination: '.swiper-pagination',
+        effect: 'coverflow',
+        grabCursor: true,
+        centeredSlides: true,
+        slidesPerView: 'auto',
+        coverflow: {
+            rotate: 50,
+            stretch: 0,
+            depth: 100,
+            modifier: 1,
+            slideShadows : true
+        }
+    });
+    var swiper2 = new Swiper(containers[1], {
+        onInit: function(swiper){
+            var len = swiper.slides.length;
+            swiper.slides.each(function(i,slide){
+
+            })
+        },
+        watchSlidesProgress:true,
+        onProgress: function(swiper, progress){
+            for (var i = 0; i < swiper.slides.length; i++){
+                var slide = swiper.slides[i];
+                var translate, boxShadow, boxShadowOpacity;
+                progress = slide.progress;
+                if (progress > 0) {
+                    translate = progress * swiper.width;
+                    boxShadowOpacity = 0;
+                }
+                else {
+                    translate = 0;
+                    boxShadowOpacity = 1  - Math.min(Math.abs(progress),1);
+                }
+                slide.style.boxShadow = '0px 0px 10px rgba(0,0,0,' + boxShadowOpacity + ')';
+                slide.style.transform = 'translate3d(' + translate + 'px,0,0)';
+            }
+        },
+        onTouchStart: function(swiper){
+            for (var i = 0; i < swiper.slides.length; i++){
+                swiper.slides[i].style.transition = '';
+            }
+        },
+        onSetTransition: function(swiper, speed) {
+            console.log(speed);
+            for (var i = 0; i < swiper.slides.length; i++){
+                swiper.slides[i].style.transition = speed + 'ms';
+            }
+        }
+
+    });
+</script>
+</body>
+</html>

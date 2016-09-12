@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en" style="font-size: 100px">
+<head>
+    <meta charset="UTF-8">
+    <title>搜索</title>
+    <style>
+        *{margin: 0;padding: 0;}
+        .demo{
+            margin-top: 100px;
+        }
+        body{
+            background: rgba(0,0,0,0.04);
+        }
+        ul{list-style: outside none}
+        .header{
+            position: relative;
+        }
+        .clearfix:before,.clearfix:after{
+            display: table;
+            content: '';
+        }
+        .clearfix:after{
+            clear:both;
+        }
+        .header__nav{
+            font-size: 0.2rem;
+        }
+        .header__nav-bg{
+            height: 0.5rem;
+            background: rgba(0,188,255,.5);
+            transform: scale(1,3);
+            transform-origin: 0 0;
+        }
+        .header__nav .content{
+            position: absolute;
+            top: 0.15rem;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            z-index: 5;
+        }
+        .header__nav .content > span{
+            float: left;
+            width: 33.333%;
+            height: .1rem;
+            color: white;
+        }
+        .search__panel{
+            margin: 0 2%;
+            padding: 0.2rem;
+            position: relative;
+            z-index:1;
+            font-size: 0.2rem;
+            text-align: center;
+            top: 0rem;
+            box-sizing: border-box;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            background: white;
+
+        }
+        .search__panel .search__panel-addr{
+            font-size: 1.2em;
+
+        }
+        .search__panel .content{
+            box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+            background: white;
+            padding: 0.5em;
+        }
+        .search__panel .search__bottom{
+            position: relative;
+
+        }
+        .search__panel .search__bottom label{
+            float: left;
+            width: 50%;
+
+        }
+        .search__panel .checkinday{
+            position: absolute;
+            top: 1px;
+            bottom: 0;
+            background: white;
+            left: 50%;
+        }
+        .search__panel .dayjoiner{
+            transform: scale(0);
+            opacity: 0;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+        }
+        .search__panel .checkinday i{
+            background: white;
+            position: relative;
+            z-index: 2;
+            font-style: normal;
+            top: 1.5em;
+            padding: 0.1em 0;
+        }
+        .search__panel .checkinday:before{
+            content: '';
+            width: 1px;
+            background: gray;
+            top: 0.3em;
+            left: 50%;
+            bottom: 0.3em;
+            position: absolute;
+        }
+        .search__panel .tip{
+            padding-top: 0.5em;
+            border-top: 1px solid gray;
+        }
+        .search__panel  .checkintime,.search__panel .checkouttime{
+            font-size: 1.5em;
+            width: 50%;
+            transform: translateX(50%);
+        }
+        .hotels__list{
+            font-size: 0.1rem;
+            background-color: white;
+        }
+
+        /*动画*/
+
+        .header .header__nav-title{
+            animation: fadeOutWithZoom .5s ease-in-out;
+            animation-play-state: paused;
+            animation-fill-mode: forwards;
+        }
+        .header.animated .header__nav-title{
+            animation-play-state: running;
+        }
+
+        .header .header__nav-bg{
+            animation: slideUp1 .5s ease-in-out;
+            animation-play-state: paused;
+            animation-fill-mode: forwards;
+        }
+        .header.animated .header__nav-bg{
+            animation-play-state: running;
+        }
+        .search__panel{
+            animation: searchPanel .5s ease-in-out;
+            animation-play-state: paused;
+            animation-fill-mode: forwards;
+        }
+        .header.animated .search__panel{
+            animation-play-state: running;
+            height: 0;
+        }
+        .search__panel .checkinday{
+            animation: fadeOutWithZoom 0.2s ease-in-out;
+            animation-play-state: paused;
+            animation-fill-mode: forwards;
+        }
+        .header.animated .checkinday{
+            animation-play-state: running;
+        }
+        .search__panel .dayjoiner{
+            animation: fadeInWithZoom 0.3s 0.2s ease-in-out;
+            animation-play-state: paused;
+            animation-fill-mode: forwards;
+        }
+        .header.animated .dayjoiner{
+            animation-play-state: running;
+        }
+        .search__panel .tip{
+            animation: fadeOutWithZoom 0.5s ease-in-out;
+            animation-play-state: paused;
+            animation-fill-mode: forwards;
+
+        }
+        .header.animated .search__panel .tip{
+            animation-play-state: running;
+            height: 0;
+        }
+        .search__panel .checkintime{
+            animation: checkintime 0.5s ease-in-out;
+            animation-play-state: paused;
+            animation-fill-mode: forwards;
+        }
+        .header.animated .search__panel .checkintime{
+            animation-play-state: running;
+        }
+        .search__panel .checkouttime{
+            animation: checkouttime 0.5s ease-in-out;
+            animation-play-state: paused;
+            animation-fill-mode: forwards;
+        }
+        .header.animated .search__panel .checkouttime{
+            animation-play-state: running;
+        }
+
+
+
+
+        @keyframes fadeOutWithZoom {
+            0%{
+                opacity: 1;
+                transform: scale(1);
+            }
+            100%{
+                opacity: 0;
+                transform: scale(0);
+            }
+        }
+        @keyframes fadeInWithZoom {
+            0%{
+                opacity: 0;
+                transform: scale(0);
+            }
+            100%{
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        @keyframes slideUp1{
+            0%{
+                transform: scale(1,3);
+            }
+            100%{
+                transform: scale(1,1);
+            }
+        }
+        @keyframes searchPanel {
+            0%{
+                transform: translateY(0);
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                background: white;
+            }
+            100%{
+                transform: translateY(-0.5rem);
+                box-shadow: 0 0 0 rgba(0,0,0,0);
+                background: transparent;
+
+            }
+        }
+        @keyframes checkintime {
+            0%{
+                transform: translateX(50%);
+            }
+            100%{
+                transform: translateX(110%);
+            }
+        }
+
+        @keyframes checkouttime {
+            0%{
+                transform: translateX(50%);
+            }
+            100%{
+                transform: translateX(-5%);
+            }
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="demo">
+        <div class="header">
+            <div class="header__nav">
+                <div class="content">
+                    <span class="header__nav-prev"></span>
+                    <span class="header__nav-title">酒店列表</span>
+                    <span class="header__nav-filter"></span>
+                </div>
+                <div class="header__nav-bg"></div>
+            </div>
+            <div class="search__panel">
+                    <div class="search__top">
+                        <span class="search__panel-addr">上海</span>
+                        <span class="search__panel-position">虹桥镇，美仑美居</span>
+                        <span class="search__panel-search icon-search"></span>
+                    </div>
+                    <div class="search__bottom clearfix">
+                        <label>
+                            <p class="tip">入住日期</p>
+                            <p class="checkintime">5月13日</p>
+                        </label>
+                        <label>
+                            <p class="tip">离店日期</p>
+                            <p class="checkouttime">5月14日</p>
+                        </label>
+                        <span class="checkinday"><i>1晚</i></span>
+                        <span class="dayjoiner">-</span>
+                    </div>
+            </div>
+        </div>
+
+        <div class="hotels__list">
+            <ul class="content">
+                <li>酒店列表01</li>
+                <li>酒店列表02</li>
+                <li>酒店列表03</li>
+                <li>酒店列表04</li>
+                <li>酒店列表05</li>
+                <li>酒店列表06</li>
+            </ul>
+        </div>
+    </div>
+    <button>click</button>
+    <script>
+        var btn = document.querySelector('button');
+        var headBg = document.querySelector('.header__nav-bg');
+        var header = document.querySelector(('.header'));
+        btn.onclick = function(){
+            header.classList.add('animated');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        ul{
+            list-style: outside none;
+        }
+        .demo{
+            width: 600px;
+            margin: 50px auto;
+        }
+        .recommend input[type="radio"]{
+            -webkit-appearance: none;
+        }
+        label{
+            display: inline-block;
+            width: 31%;
+            text-align: center;
+        }
+        input[type="radio"]:checked + label{
+            color: #7f1f59;
+        }
+
+        .list{
+            width: 600px;
+            height: 200px;
+            position: relative;
+            color: #333;
+            margin-top: 2em;
+            padding-top: 10px;
+            overflow: hidden;
+        }
+        ul{
+            height: 100%;
+            display: flex;
+            transition: transform .5s ease-in-out;
+            will-change: transform;
+            transform: translate3d(0,0,0);
+        }
+        li{
+            flex-shrink:0;
+            width: 100%;
+            height: 100%;
+        }
+        li:nth-child(1){
+            background: lightblue;
+        }
+        li:nth-child(2){
+            background: lightpink;
+        }
+        li:nth-child(3){
+            background: lightgoldenrodyellow;
+        }
+        input[type="radio"]:nth-of-type(1):checked ~ .list ul{
+            transform: translate3d(0,0,0);
+        }
+        input[type="radio"]:nth-of-type(1):checked ~ .list .triangle-box{
+            transform: translate3d(16.66667%,0,0);
+        }
+        input[type="radio"]:nth-of-type(2):checked ~ .list ul{
+            transform: translate3d(-100%,0,0);
+        }
+        input[type="radio"]:nth-of-type(2):checked ~ .list .triangle-box{
+            transform: translate3d(50%,0,0);
+        }
+        input[type="radio"]:nth-of-type(3):checked ~ .list ul{
+            transform: translate3d(-200%,0,0);
+        }
+        input[type="radio"]:nth-of-type(3):checked ~ .list .triangle-box{
+            transform: translate3d(83.333%,0,0);
+        }
+        .list .triangle-box{
+            margin-left: -5px;
+            display: block;
+            transform: translateX(16.6666%);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            will-change: transform;
+            transition: transform 0.5s ease-in-out;
+            /*animation-fill-mode: forwards;
+            animation-duration: 1s;
+            animation-play-state: paused;
+            animation-timing-function: ease-in-out;*/
+        }
+        .list .triangle{
+            width: 10px;
+            height: 10px;
+            background: lightgrey;
+            transform: rotate(-45deg) translateY(6px);
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo">
+        <div class="recommend">
+            <input type="radio" id="tab-1" name="tab" checked/>
+            <label for="tab-1">历史记录</label>
+            <input type="radio" id="tab-2" name="tab"/>
+            <label for="tab-2">推荐酒店</label>
+            <input type="radio" id="tab-3" name="tab"/>
+            <label for="tab-3">即将入住</label>
+            <div class="list">
+                <span class="triangle-box"><i class="triangle"></i></span>
+                <ul>
+                    <li>列表1</li>
+                    <li>列表2</li>
+                    <li>列表3</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

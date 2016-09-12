@@ -18,10 +18,10 @@ while(_g <= 90){
   _g++;
 }
 
-var changeActiveGroupReducer = function(state = cityGroupIndexs[0], action){
+var changeActiveGroupReducer = function(state = {index:cityGroupIndexs[0],trigger: 0}, action){
   switch(action.type){
     case 'CHANGE_ACTIVE_GROUP':
-      return action.activeGroup;
+      return {index:action.index,trigger: action.trigger};
     default: 
       return state;
   }
@@ -36,7 +36,7 @@ var cityGroupReducer = function(state = cityGroups, action){
 
 
 
-var reducer = redux.combineReducers({activeGroupIndex: changeActiveGroupReducer, cityGroupIndexs: cityGroupIndexsReducer, cityGroups: cityGroupReducer});
+var reducer = redux.combineReducers({activeGroup: changeActiveGroupReducer, cityGroupIndexs: cityGroupIndexsReducer, cityGroups: cityGroupReducer});
 
 
 //创建一个加载city-list-group的容器元素
@@ -45,10 +45,13 @@ $('body').append(citylistGroupEl);
 var store = redux.createStore(reducer);
 
 
-
+//使用方法
 riot.mount(document.querySelector('.app'),'city-list', {
   store,
-  autoScrollGroupIndex: true
+  showFixedActiveGroupIndex: true,
+  onItemTouchTap: function(e){
+    console.log(e.item);
+  }
 });
 
 riot.mount(citylistGroupEl[0], 'city-list-group', {

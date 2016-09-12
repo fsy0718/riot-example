@@ -1,5 +1,6 @@
 "use strict";
 const path = require('path');
+const fs = require('fs');
 const glob = require('glob');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
@@ -22,14 +23,48 @@ const indexHtmlItems = [];
 Object.keys(entries).forEach(function(name){
   indexHtmlItems.push('<li><a href="/' + name + '.html">' + name + '</a></li>')
   webpackConfig.entry[name] = entries[name];
+  var _path = path.join(__dirname, 'src/components/', name);
+  var demotpl = path.join(_path, name + '.demo.html');
+  try{
+    if(!fs.accessSync(demotpl, fs.R_OK)){
+      //这是更改默认模板的地方
+    }
+  }catch(e){
+    demotpl = './template.html'
+  }
+  console.log(demotpl);
   let plugin = new HtmlWebpackPlugin({
     filename: name + '.html',
-    template: './template.html',
+    template: demotpl,
     inject: 'body',
     chunks: [name],
     title: name
   });
   webpackConfig.plugins.push(plugin);
+
+  /*var readme = path.join(_path, 'readme.md');
+  try{
+    console.log(readme)
+    if(fs.accessSync(readme, fs.R_OK)){
+      console.log(12);
+    }else{
+      fs.readFile(readme, function(err, data){
+        let pluginReadme = new HtmlWebpackPlugin({
+          filename: name + '-readme.html',
+          title: name + 'Readme',
+          chunks: [''],
+          templateContent: function(templateParams, compilation){
+            console.log(arguments,111111111111111111111111111111);
+            return '...'
+          }
+        })
+        ywebpackConfig.plugins.push(pluginReadme);
+      })
+
+    }
+  }catch(e){
+  }*/
+  
 })
 
 //生成首页

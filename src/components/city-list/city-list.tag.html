@@ -1,12 +1,14 @@
 require('./city-list.css');
 
 <city-list>
+  
   <dl>
+    <h3 show={showFixedActiveGroupIndex} class="city-list__current-index">{getActionGroup().index}</h3>
     <virtual each={citys, index in cityGroups}>
-    <dt if={citys.citys.length}>{citys.index}</dt>
-    <dd if={citys.citys.length}>
+    <dt class="city-list__index" if={citys.citys.length}>{citys.index}</dt>
+    <dd if={citys.citys.length} class="city-list__citys-box">
       <ul>
-        <li onclick={handleClick} each={city, index in citys.citys}>{city.CityName}</li>
+        <li class="city-list__citys-item" onclick={handleGroupItemClick} each={city, index in citys.citys}>{city.CityName}</li>
       </ul>
     </dd>
     </virtual>
@@ -15,111 +17,146 @@ require('./city-list.css');
     var tag = this;
     var store = tag.opts.store;
     var storeData = store.getState();
-    var unsubscribe = null;
     tag.cityGroups = storeData.cityGroups || [];
-    var activeGroupIndex = storeData.activeGroupIndex;
-    var listRect = null;
+    tag.activeGroupIndex = storeData.activeGroup.index;
+    var scrollContainer = tag.opts.scrollContainer || window;
+    var unsubscribe = null;
+    var scrollThrottleTimer = null;
+    var listClientRect = null;
+    //索引高度
     var groupIndexHeight = 0;
+    //单个城市高度
     var groupItemHeight = 0;
-    var groupItemsHeightMap = [];
-    var calcGroupHeight = function(defaultHeight){
-      var h = defaultHeight || 0;
+    var pageScrollTop = 0;
+    //每个城市分组的数据地图
+    //@type [object]
+    //@type string [object.index] 当前索引值
+    //@type number [object.value] 当前距离顶部的高度值
+    //@type number [object.height] 当前城市分组的高度
+    //@example [{index: 'A', value: 0, height: 175}]
+    var groupListMap = [];
+    var calcGroupListMap = function(initTop){
+      var h = initTop || 0;
+      //h += pageScrollTop;
       tag.cityGroups.forEach(function(cityGroup){
-        var cityOffsetData = {};
+        var d = {};
         var _h = groupIndexHeight + cityGroup.citys.length * groupItemHeight;
-        cityOffsetData.index = cityGroup.index;
-        cityOffsetData.value = h;
-        cityOffsetData.height = _h;
+        d.index = cityGroup.index;
+        d.value = h;
+        d.height = _h;
         h += _h;
-        groupItemsHeightMap.push(cityOffsetData);
+        groupListMap.push(d);
       })
-    }
+    };
 
+    var calcShowFixedActiveGroupIndex = function(value,groupItemMap){
+      if(value - groupIndexHeight > groupItemMap.value){
+        tag.showFixedActiveGroupIndex = true;
+      }else{
+        tag.showFixedActiveGroupIndex = false;
+      }
+      tag.update();
+
+    }
+    //获取当前指定值的索引值区间
     var getCurrentGroupIndex = function(value){
-      var i = 0, len = groupItemsHeightMap.length;
+      var i = 0, len = groupListMap.length;
       while(i < len){
-        if(groupItemsHeightMap[i].value > value){
-          var _i = i == 0 ? 0 : i - 1;
-          return groupItemsHeightMap[_i].index
+        if(groupListMap[i].value > value){
+          var _i = i === 0 ? 0 : i - 1;
+          if(tag.opts.showFixedActiveGroupIndex){
+            calcShowFixedActiveGroupIndex(value, groupListMap[_i]);
+          }
+          return groupListMap[_i].index;
         }
         i++;
       }
       return null;
-    }
-
-    var getGroupIndexPosHeight = function(groupIndex){
-      var i = 0, len = groupItemsHeightMap.length;
-      while(i < len){
-        if(groupItemsHeightMap[i].index === groupIndex){
-          return groupItemsHeightMap[i].value;
+    };
+    //根据top获取索引值
+    var getGrouIndexPosHeight = function(groupIndex){
+      var i = 0, len = groupListMap.length;
+      while( i < len){
+        if(groupListMap[i].index === groupIndex){
+          return groupListMap[i].value;
         }
         i++
       }
       return 0;
-    }
-
-    tag.handleClick = function(e){
-      var activeGroup = e.item.city.Group;
-      if(activeGroupIndex !== activeGroup){
+    };
+    tag.getActionGroup = function(){
+      return store.getState().activeGroup || {};
+    };
+    
+    //分发 CHANGE_ACTIVE_GROUP的action
+    var dispatchChangeActionGroupAction = function(groupIndex, trigger){
       store.dispatch({
         type: 'CHANGE_ACTIVE_GROUP',
-        activeGroup: activeGroup
+        index: groupIndex,
+        trigger: trigger
       });
+    };
+
+
+    var scrollHandler = function(e){
+      if(tag.getActionGroup.trigger === 1){
+        return;
       }
-
-      e.preventUpdate = true;
-    }
-    tag.getActiveGroupIndex = function(){
-      return store.getState().activeGroupIndex;
-    }
-
-    tag.on('before-mount', function(){
-      unsubscribe = store.subscribe(function(){
-        if(tag.getActiveGroupIndex() !== activeGroupIndex ){
-          activeGroupIndex = tag.getActiveGroupIndex();
-          //var _top = getGroupIndexPosHeight(activeGroupIndex);
-          //$(window).scrollTop(_top);
+      clearTimeout(scrollThrottleTimer);
+      scrollThrottleTimer = setTimeout(function(){
+        var _listClientRect = tag.root.getBoundingClientRect();
+        var _top = listClientRect.top - _listClientRect.top;
+        var groupIndex = getCurrentGroupIndex(_top);
+        if(groupIndex !== tag.getActionGroup().index){
+          dispatchChangeActionGroupAction(groupIndex,0);
         }
+        clearTimeout(scrollThrottleTimer);
+      },30);
+    };
+
+
+    tag.handleGroupItemClick = function(e){
+      e.preventUpdate = true;
+      var activeGroup = e.item.city.Group;
+      tag.opts.onItemTouchTap && tag.opts.onItemTouchTap(e);
+      if(activeGroup !== tag.activeGroupIndex){
+        dispatchChangeActionGroupAction(activeGroup,1);
+      }
+    }
+    tag.on('before-mount',  function(){
+      //监听store的变化,如果isTriggerScroll为true，则修改groupList的top值
+      unsubscribe = store.subscribe(function(){
+        var _activeGroup = tag.getActionGroup();
+        if(_activeGroup.trigger === 1 && _activeGroup.index !== tag.activeGroupIndex){
+          _idx = _activeGroup.index;
+          var _top = getGrouIndexPosHeight(_idx);
+          $(scrollContainer).scrollTop(_top + pageScrollTop);
+
+        }
+        tag.activeGroupIndex = _activeGroup.index
       });
-    })
+      //监听滚动事件
+      $(scrollContainer).on('scroll', scrollHandler);
+    });
+
+    tag.on('mount',function(){
+      listClientRect = tag.root.getBoundingClientRect();
+      var $root = $(tag.root);
+      groupIndexHeight =  $root.find('dt').height();
+      groupItemHeight  = $root.find('dd li').height();
+      pageScrollTop = Math.max(document.body.scrollTop, document.documentElement.scrollTop) || 0;
+      var groupIndexWidth = $root.find('dt').width();
+      $root.find('.city-list__current-index').css('width', groupIndexWidth);
+      //计算grouplist本身距离顶部的偏移值
+      var t = (parseFloat($root.find('dl').css('padding-top')) || 0) + listClientRect.top;
+      calcGroupListMap(t);
+    });
+
     tag.on('before-unmount', function(){
       unsubscribe();
-    })
+      $(scrollContainer).off('scroll', scrollHandler);
+    });
 
-    if(tag.opts.autoScrollGroupIndex){
-      var timer = null;
-      var scrollHandler = function(){
-        scrolling = true;
-        clearTimeout(timer);
-        timer = setTimeout(function(){
-          var _listRect = tag.root.getBoundingClientRect();
-          var _top = listRect.top - _listRect.top;
-          var groupIndex = getCurrentGroupIndex(_top);
-          if(groupIndex !== tag.getActiveGroupIndex()){
-            store.dispatch({
-              type: 'CHANGE_ACTIVE_GROUP',
-              activeGroup: groupIndex
-            });
-            
-          }
-          clearTimeout(timer);
-        },30)
-
-      }
-      tag.on('mount', function(){
-        listRect = tag.root.getBoundingClientRect();
-        groupIndexHeight = $(tag.root).find('dt').height();
-        groupItemHeight = $(tag.root).find('dd li').height();
-        var t = (parseFloat($(tag.root).find('dl').css('padding-top')) || 0) + listRect.top;
-        calcGroupHeight(t);
-      })
-      tag.on('before-mount', function(){
-        $(window).on('scroll', scrollHandler);
-      })
-      tag.on('before-unmount', function(){
-        $(window).off('scroll', scrollHandler);
-      })
-    }
 
   </script>
 </city-list>

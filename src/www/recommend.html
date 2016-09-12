@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>推荐</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        a{
+            text-decoration: none;
+            display: inline-block;
+        }
+        ul{
+            list-style: outside none;
+        }
+        .demo{
+            text-align: center;
+            margin-top: 2rem;
+        }
+        .recommend{
+            display: inline-block;
+        }
+        nav{
+            display: flex;
+            justify-content: center;
+        }
+        nav a{
+            color: lightgrey;
+            flex-grow: 1;
+        }
+        nav a.active{
+            color: #7f1f59;
+        }
+        .list{
+            width: 600px;
+            height: 200px;
+            position: relative;
+            color: #333;
+            margin-top: 2em;
+            padding-top: 10px;
+            overflow: hidden;
+        }
+        ul{
+            height: 100%;
+            display: flex;
+            transition: transform .5s ease-in-out;
+            will-change: transform;
+            transform: translate3d(0,0,0);
+        }
+        .list li{
+            height: 100%;
+            background: lightgrey;
+            flex-shrink: 0;
+            width: 100%;
+        }
+        .list li.slideOutLeft{
+            animation-name: slideOutLeft;
+        }
+        .list li.slideInLeft{
+            animation-name: slideInLeft;
+        }
+        .list li.animated{
+            animation-play-state: running;
+        }
+        .list li:nth-child(1){
+            background: lightpink;
+        }
+        .list li:nth-child(2){
+            background: lightblue;
+
+        }
+        .list li:nth-child(3){
+
+        }
+        .list .triangle-box{
+            margin-left: -5px;
+            display: block;
+            transform: translateX(16.6666%);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            will-change: transform;
+            transition: transform 0.5s ease-in-out;
+            /*animation-fill-mode: forwards;
+            animation-duration: 1s;
+            animation-play-state: paused;
+            animation-timing-function: ease-in-out;*/
+        }
+        .list .triangle{
+            width: 10px;
+            height: 10px;
+            background: lightgrey;
+            transform: rotate(-45deg) translateY(6px);
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo">
+        <div class="recommend">
+            <nav>
+                <a href="javascript:;" class="active" data-index="1">历史搜索</a>
+                <a href="javascript:;" data-index="2">推荐酒店</a>
+                <a href="javascript:;" data-index="3">即将入住</a>
+            </nav>
+            <div class="list">
+                <span class="triangle-box"><i class="triangle"></i></span>
+                <ul>
+                    <li>列表1</li>
+                    <li>列表2</li>
+                    <li>列表3</li>
+                </ul>
+            </div>
+            <p>transform是不是脱离文档流</p>
+        </div>
+    </div>
+    <script>
+        var nav = document.querySelector('nav');
+        var navAs = document.querySelectorAll('nav a');
+        var ul = document.querySelector('ul');
+        var lastIdx = 1;
+        var num = navAs.length;
+        var triangleBox = document.querySelector('.triangle-box');
+        nav.addEventListener('click', function(e){
+            var target = e.target;
+            if(target.classList.contains('active')){
+                return;
+            }
+            var idx = +target.dataset.index;
+            triangleBox.style.transform = 'translate3d(' + (idx * 2 - 1 ) / (num * 2) * 100 + '%,0,0)';
+            navAs.item(lastIdx - 1).classList.remove('active');
+            navAs.item(idx - 1).classList.add('active');
+            ul.style.transform = 'translate3d(-' + (idx - 1) * 100 + '%,0,0)';
+            lastIdx = idx;
+        })
+    </script>
+</body>
+</html>

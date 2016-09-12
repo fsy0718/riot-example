@@ -1,7 +1,7 @@
 ul{
   list-style: outside none;
 }
-body, ul, dl, dd{
+body, ul, dl, dd,h3{
   margin: 0;
 }
 dd, ul{

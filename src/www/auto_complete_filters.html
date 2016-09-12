@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>自动完成时filter的动画</title>
+    <style>
+        *{margin:0;padding: 0}
+        .form-field{
+            position: relative;
+            width: 300px;
+            margin: 50px auto;
+            padding-top: 1em;
+        }
+        .form-field label{
+            display: block;
+        }
+        .form-field input{
+            border: 0 none;
+            outline: 0 none;
+            padding: 0.4em 0.5em;
+        }
+        .form-field input:focus ~ div > hr:nth-child(2){
+            transform: scaleX(1);
+        }
+        .form-field input:focus + .placeholder-float{
+            bottom: 2em;
+            font-size: 12px;
+            color: rgb(0,188,212);
+
+        }
+        .form-field hr{
+            position: absolute;
+            height: 0;
+            border: 0 none;
+            border-bottom: solid 1px rgba(118,118,118,0.5);
+            width: 100%;
+        }
+        .form-field hr:nth-child(2){
+            transform: scaleX(0);
+            border-bottom: solid 2px rgb(0,188,212);
+            transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+
+        }
+        .form-field .placeholder{
+            position: absolute;
+            bottom: 2px;
+            left: 0.4em;
+            font-size: 1em;
+            color: gray;
+            transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms
+        }
+    </style>
+</head>
+<body>
+  <div class="demo">
+      <div class="form-field">
+          <label>
+              <input type="text"/>
+              <span class="placeholder placeholder-float">请输入</span>
+              <div>
+                  <hr/>
+                  <hr/>
+              </div>
+          </label>
+      </div>
+      <div class="form-field">
+          <label>
+              <input type="text"/>
+              <span class="placeholder">请输入</span>
+              <div>
+                  <hr/>
+                  <hr/>
+              </div>
+          </label>
+      </div>
+  </div>
+</body>
+</html>

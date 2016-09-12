@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>相册</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        ul{
+            list-style: outside none;
+        }
+        body{
+            background: rgba(0,0,0,0.03);
+        }
+        .demo{
+            width: 600px;
+            height: 600px;
+            overflow: hidden;
+        }
+        .photo{
+            width: 600px;
+            margin: 50px auto;
+            background: white;
+            height: 1200px;
+            -webkit-perspective: 700px;
+            -webkit-perspective-origin-x: 400px;
+            position: relative;
+        }
+        ul{
+
+            width: 100%;
+            height: 100%;
+            position: relative;
+            margin-top: 25%;
+
+        }
+        li{
+            width: 600px;
+            height: 600px;
+            box-shadow: 0 1px 10px rgba(0,0,0,0.05);
+            border-radius: 5px;
+            position: absolute;
+            background: white;
+            font-size: 5rem;
+            color: white;
+            text-align: center;
+            top: 0;
+            left: 0;
+            transition: all .5s linear;
+        }
+        li:nth-child(1){
+
+            background: lightpink;
+
+        }
+        li:nth-child(2){
+
+            background: lightblue;
+
+        }
+        li:nth-child(3){
+
+            background: lavenderblush;
+
+        }
+        li:nth-child(4){
+
+            background: skyblue;
+
+        }
+        li:nth-child(5){
+
+            background: mistyrose;
+
+        }
+        li:nth-child(6){
+
+            background: darksalmon;
+
+        }
+
+    </style>
+</head>
+<body>
+<div class="demo">
+    <div class="photo">
+        <ul>
+            <li>photo01</li>
+            <li>photo02</li>
+            <li>photo03</li>
+            <li>photo04</li>
+            <li>photo05</li>
+            <li  class="active">photo06</li>
+        </ul>
+    </div>
+</div>
+    <div class="controls">
+        <button class="prev">prev</button>
+        <button class="next">next</button>
+    </div>
+    <script>
+
+        (function(win) {
+
+            var y_space = 200, z_space = 200;
+
+            var view = document.querySelector('.photo'),
+                    lis = [].slice.call(document.querySelectorAll('ul li'),0),
+                    prev = document.querySelector('.controls .prev'),
+                    next = document.querySelector('.controls .next');
+
+            var z_index = lis.length,
+                    current_index = 1,
+                    translate_y = y_space *-1,
+                    translate_z = z_space *-1;
+
+            lis.forEach(function(li) {
+
+                li.style['-webkit-transform'] = 'translate3d(0px, ' + translate_y + 'px, ' + translate_z + 'px)';
+                li.style['z-index'] = z_index;
+                li.dataset['translate_y'] = translate_y;
+                li.dataset['translate_z'] = translate_z;
+
+                z_index--;
+                translate_y -= y_space;
+                translate_z -= z_space;
+
+            });
+
+            next.addEventListener('click', function() {
+                if(this.getAttribute('disabled') === 'disabled'){
+                    return false;
+                }
+
+                lis.forEach(function(li) {
+                    animate_stack(li, y_space, z_space);
+                });
+                lis.some(function(li,i){
+                    if(i === current_index - 1){
+                        lis[i].style.opacity = 0;
+                        return true;
+                    }
+                });
+                current_index ++;
+                check_buttons();
+            });
+
+            prev.addEventListener('click', function() {
+                if(this.getAttribute('disabled') === 'disabled'){
+                    return false;
+                }
+                lis.forEach(function(li) {
+                    animate_stack(li, -y_space, -z_space);
+                });
+                lis.some(function(li,i){
+                    if(i === current_index - 2){
+                        lis[i].style.opacity = 1;
+                        return true;
+                    }
+                });
+                current_index --;
+                check_buttons();
+            });
+
+            /*left.bind('click', function() {
+                view.get(0).style['-webkit-perspective-origin-x'] = '-200px';
+                view.get(0).style['left'] = '100px';
+            });
+
+            centre.bind('click', function() {
+                view.get(0).style['-webkit-perspective-origin-x'] = '400px';
+                view.get(0).style['left'] = '0'
+            });
+
+            right.bind('click', function() {
+                view.get(0).style['-webkit-perspective-origin-x'] = '1000px';
+                view.get(0).style['left'] = '-200px'
+            });*/
+            function check_buttons() {
+                console.log(current_index);
+                if(current_index==1) {
+                    prev.setAttribute('disabled','disabled');
+
+                }
+                else {
+                    prev.removeAttribute('disabled');
+                }
+
+                if(current_index == lis.length) {
+                    next.setAttribute('disabled','disabled');
+                }
+                else {
+                    next.removeAttribute('disabled');
+                }
+            }
+
+
+            function animate_stack(obj, y, z) {
+
+                var new_y = Number(obj.dataset['translate_y']) + y;
+                var new_z = Number(obj.dataset['translate_z']) + z;
+
+                obj.style['-webkit-transform'] = 'translate3d(0px, ' + new_y + 'px, ' + new_z + 'px)';
+
+                obj.dataset['translate_y'] = new_y;
+                obj.dataset['translate_z'] = new_z;
+
+            }
+
+
+        })(window);
+
+    </script>
+</body>
+</html>
