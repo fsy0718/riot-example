@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>城市列表纯净js版</title>
+</head>
+
+<body>
+	<div class="app city-list" data-is="city-list" riot-tag="city-list">
+		<dl>
+			<h3 class="city-list__current-index" style="display: none">B</h3>
+			<dt class="city-list__index" data-city-group="B">B</dt>
+			<dd class="city-list__citys-box">
+				<ul>
+					<li class="city-list__citys-item" data-city-id="1101">北京</li>
+					<li class="city-list__citys-item" data-city-id="1306">保定</li>
+					<li class="city-list__citys-item" data-city-id="131081">霸州(廊坊)</li>
+					<li class="city-list__citys-item" data-city-id="1502">包头</li>
+					<li class="city-list__citys-item" data-city-id="3403">蚌埠</li>
+					<li class="city-list__citys-item" data-city-id="3723">滨州</li>
+				</ul>
+			</dd>
+			<dt class="city-list__index" data-city-group="C">C</dt>
+			<dd class="city-list__citys-box">
+				<ul>
+					<li class="city-list__citys-item" data-city-id="1309">沧州</li>
+					<li class="city-list__citys-item" data-city-id="1404">长治</li>
+					<li class="city-list__citys-item" data-city-id="2201">长春</li>
+					<li class="city-list__citys-item" data-city-id="3204">常州</li>
+					<li class="city-list__citys-item" data-city-id="320581">常熟</li>
+					<li class="city-list__citys-item" data-city-id="330222">慈溪</li>
+					<li class="city-list__citys-item" data-city-id="3411">滁州</li>
+					<li class="city-list__citys-item" data-city-id="4301">长沙</li>
+					<li class="city-list__citys-item" data-city-id="4310">郴州</li>
+					<li class="city-list__citys-item" data-city-id="4451">潮州</li>
+					<li class="city-list__citys-item" data-city-id="5001">重庆</li>
+					<li class="city-list__citys-item" data-city-id="5101">成都</li>
+				</ul>
+			</dd>
+			<dt class="city-list__index" data-city-group="D">D</dt>
+			<dd class="city-list__citys-box">
+				<ul>
+					<li class="city-list__citys-item" data-city-id="1402">大同</li>
+					<li class="city-list__citys-item" data-city-id="2102">大连</li>
+					<li class="city-list__citys-item" data-city-id="2106">丹东</li>
+					<li class="city-list__citys-item" data-city-id="210882">大石桥(营口)</li>
+					<li class="city-list__citys-item" data-city-id="321181">丹阳(镇江)</li>
+					<li class="city-list__citys-item" data-city-id="3714">德州</li>
+				</ul>
+			</dd>
+			<dt class="city-list__index" data-city-group="E">E</dt>
+			<dd class="city-list__citys-box">
+				<ul>
+					<li class="city-list__citys-item" data-city-id="1506">鄂尔多斯</li>
+					<li class="city-list__citys-item" data-city-id="511181">峨眉山</li>
+				</ul>
+			</dd>
+			<dt class="city-list__index" data-city-group="F">F</dt>
+			<dd class="city-list__citys-box">
+				<ul>
+					<li class="city-list__citys-item" data-city-id="2104">抚顺</li>
+					<li class="city-list__citys-item" data-city-id="320923">阜宁(盐城)</li>
+					<li class="city-list__citys-item" data-city-id="3501">福州</li>
+					<li class="city-list__citys-item" data-city-id="352203">福鼎</li>
+				</ul>
+			</dd>
+			<dt class="city-list__index" data-city-group="G">G</dt>
+			<dd class="city-list__citys-box">
+				<ul>
+					<li class="city-list__citys-item" data-city-id="370523">广饶(东营)</li>
+					<li class="city-list__citys-item" data-city-id="4401">广州</li>
+					<li class="city-list__citys-item" data-city-id="4503">桂林</li>
+					<li class="city-list__citys-item" data-city-id="5201">贵阳</li>
+				</ul>
+			</dd>
+			<dt class="city-list__index" data-city-group="H">H</dt>
+			<dd class="city-list__citys-box">
+				<ul>
+					<li class="city-list__citys-item" data-city-id="1304">邯郸</li>
+					<li class="city-list__citys-item" data-city-id="1501">呼和浩特</li>
+					<li class="city-list__citys-item" data-city-id="2114">葫芦岛</li>
+					<li class="city-list__citys-item" data-city-id="2301">哈尔滨</li>
+					<li class="city-list__citys-item" data-city-id="2304">鹤岗</li>
+					<li class="city-list__citys-item" data-city-id="320621">海安(南通)</li>
+					<li class="city-list__citys-item" data-city-id="320684">海门(南通)</li>
+					<li class="city-list__citys-item" data-city-id="3208">淮安</li>
+					<li class="city-list__citys-item" data-city-id="3301">杭州</li>
+					<li class="city-list__citys-item" data-city-id="3401">合肥</li>
+					<li class="city-list__citys-item" data-city-id="3404">淮南</li>
+					<li class="city-list__citys-item" data-city-id="3406">淮北</li>
+					<li class="city-list__citys-item" data-city-id="3410">黄山</li>
+					<li class="city-list__citys-item" data-city-id="3729">菏泽</li>
+					<li class="city-list__citys-item" data-city-id="4304">衡阳</li>
+					<li class="city-list__citys-item" data-city-id="4601">海口</li>
+					<li class="city-list__citys-item" data-city-id="6107">汉中</li>
+				</ul>
+			</dd>
+			<dt class="city-list__index" data-city-group="J">J</dt>
+			<dd class="city-list__citys-box">
+				<ul>
+					<li class="city-list__citys-item" data-city-id="1424">晋中</li>
+					<li class="city-list__citys-item" data-city-id="2107">锦州</li>
+					<li class="city-list__citys-item" data-city-id="2202">吉林</li>
+					<li class="city-list__citys-item" data-city-id="2308">佳木斯</li>
+					<li class="city-list__citys-item" data-city-id="320281">江阴(无锡)</li>
+					<li class="city-list__citys-item" data-city-id="320831">金湖(淮安)</li>
+					<li class="city-list__citys-item" data-city-id="321183">句容(镇江)</li>
+					<li class="city-list__citys-item" data-city-id="321282">靖江(泰州)</li>
+					<li class="city-list__citys-item" data-city-id="330182">建德(杭州)</li>
+					<li class="city-list__citys-item" data-city-id="3304">嘉兴</li>
+					<li class="city-list__citys-item" data-city-id="3602">景德镇</li>
+					<li class="city-list__citys-item" data-city-id="3604">九江</li>
+					<li class="city-list__citys-item" data-city-id="3701">济南</li>
+					<li class="city-list__citys-item" data-city-id="3708">济宁</li>
+					<li class="city-list__citys-item" data-city-id="612725">靖边(榆林)</li>
+				</ul>
+			</dd>
+			<dt class="city-list__index" data-city-group="K">K</dt>
+			<dd class="city-list__citys-box">
+				<ul>
+					<li class="city-list__citys-item" data-city-id="320583">昆山</li>
+					<li class="city-list__citys-item" data-city-id="4102">开封</li>
+					<li class="city-list__citys-item" data-city-id="5301">昆明</li>
+				</ul>
+			</dd>
+			<dt class="city-list__index" data-city-group="L">L</dt>
+			<dd class="city-list__citys-box">
+				<ul>
+					<li class="city-list__citys-item" data-city-id="1310">廊坊</li>
+					<li class="city-list__citys-item" data-city-id="3207">连云港</li>
+					<li class="city-list__citys-item" data-city-id="370832">梁山(济宁)</li>
+					<li class="city-list__citys-item" data-city-id="3713">临沂</li>
+					<li class="city-list__citys-item" data-city-id="3715">聊城</li>
+					<li class="city-list__citys-item" data-city-id="4103">洛阳</li>
+					<li class="city-list__citys-item" data-city-id="5332">丽江</li>
+					<li class="city-list__citys-item" data-city-id="5401">拉萨</li>
+					<li class="city-list__citys-item" data-city-id="6201">兰州</li>
+				</ul>
+			</dd>
+			<dt class="city-list__index" data-city-group="M">M</dt>
+			<dd class="city-list__citys-box">
+				<ul>
+					<li class="city-list__citys-item" data-city-id="2310">牡丹江</li>
+				</ul>
+			</dd>
+			<dt class="city-list__index" data-city-group="N">N</dt>
+			<dd class="city-list__citys-box">
+				<ul>
+					<li class="city-list__citys-item" data-city-id="3201">南京</li>
+					<li class="city-list__citys-item" data-city-id="3206">南通</li>
+					<li class="city-list__citys-item" data-city-id="3302">宁波</li>
+					<li class="city-list__citys-item" data-city-id="3509">宁德市</li>
+					<li class="city-list__citys-item" data-city-id="3522">宁德</li>
+					<li class="city-list__citys-item" data-city-id="3601">南昌</li>
+					<li class="city-list__citys-item" data-city-id="4501">南宁</li>
+				</ul>
+			</dd>
+			<dt class="city-list__index" data-city-group="P">P</dt>
+			<dd class="city-list__citys-box">
+				<ul>
+					<li class="city-list__citys-item" data-city-id="2111">盘锦</li>
+					<li class="city-list__citys-item" data-city-id="3503">莆田</li>
+					<li class="city-list__citys-item" data-city-id="530821">普洱市</li>
+				</ul>
+			</dd>
+			<dt class="city-list__index" data-city-group="Q">Q</dt>
+			<dd class="city-list__citys-box">
+				<ul>
+					<li class="city-list__citys-item" data-city-id="1303">秦皇岛</li>
+					<li class="city-list__citys-item" data-city-id="2302">齐齐哈尔</li>
+					<li class="city-list__citys-item" data-city-id="320681">启东(南通)</li>
+					<li class="city-list__citys-item" data-city-id="3308">衢州</li>
+					<li class="city-list__citys-item" data-city-id="3505">泉州</li>
+					<li class="city-list__citys-item" data-city-id="3702">青岛</li>
+					<li class="city-list__citys-item" data-city-id="370819">曲阜</li>
+				</ul>
+			</dd>
+			<dt class="city-list__index" data-city-group="R">R</dt>
+			<dd class="city-list__citys-box">
+				<ul>
+					<li class="city-list__citys-item" data-city-id="320682">如皋(南通)</li>
+					<li class="city-list__citys-item" data-city-id="371083">乳山(威海)</li>
+					<li class="city-list__citys-item" data-city-id="3711">日照</li>
+				</ul>
+			</dd>
+			<dt class="city-list__index" data-city-group="S">S</dt>
+			<dd class="city-list__citys-box">
+				<ul>
+					<li class="city-list__citys-item" data-city-id="1301">石家庄</li>
+					<li class="city-list__citys-item" data-city-id="2101">沈阳</li>
+					<li class="city-list__citys-item" data-city-id="2203">四平</li>
+					<li class="city-list__citys-item" data-city-id="3101">上海</li>
+					<li class="city-list__citys-item" data-city-id="3205">苏州</li>
+					<li class="city-list__citys-item" data-city-id="320827">泗洪</li>
+					<li class="city-list__citys-item" data-city-id="3213">宿迁</li>
+					<li class="city-list__citys-item" data-city-id="3306">绍兴</li>
+					<li class="city-list__citys-item" data-city-id="330622">上虞(绍兴)</li>
+					<li class="city-list__citys-item" data-city-id="3623">上饶</li>
+					<li class="city-list__citys-item" data-city-id="4114">商丘</li>
+					<li class="city-list__citys-item" data-city-id="429021">神农架林区</li>
+					<li class="city-list__citys-item" data-city-id="4403">深圳</li>
+					<li class="city-list__citys-item" data-city-id="4405">汕头</li>
+					<li class="city-list__citys-item" data-city-id="4602">三亚</li>
+				</ul>
+			</dd>
+			<dt class="city-list__index" data-city-group="T">T</dt>
+			<dd class="city-list__citys-box">
+				<ul>
+					<li class="city-list__citys-item" data-city-id="1201">天津</li>
+					<li class="city-list__citys-item" data-city-id="1302">唐山</li>
+					<li class="city-list__citys-item" data-city-id="1401">太原</li>
+					<li class="city-list__citys-item" data-city-id="2112">铁岭</li>
+					<li class="city-list__citys-item" data-city-id="320585">太仓</li>
+					<li class="city-list__citys-item" data-city-id="3212">泰州</li>
+					<li class="city-list__citys-item" data-city-id="321283">泰兴</li>
+					<li class="city-list__citys-item" data-city-id="3310">台州</li>
+					<li class="city-list__citys-item" data-city-id="3407">铜陵</li>
+					<li class="city-list__citys-item" data-city-id="341181">天长(滁州)</li>
+					<li class="city-list__citys-item" data-city-id="3709">泰安</li>
+					<li class="city-list__citys-item" data-city-id="5222">铜仁地区</li>
+					<li class="city-list__citys-item" data-city-id="522201">铜仁</li>
+				</ul>
+			</dd>
+			<dt class="city-list__index" data-city-group="W">W</dt>
+			<dd class="city-list__citys-box">
+				<ul>
+					<li class="city-list__citys-item" data-city-id="3202">无锡</li>
+					<li class="city-list__citys-item" data-city-id="320584">吴江</li>
+					<li class="city-list__citys-item" data-city-id="3402">芜湖</li>
+					<li class="city-list__citys-item" data-city-id="362334">婺源(上饶)</li>
+					<li class="city-list__citys-item" data-city-id="3707">潍坊</li>
+					<li class="city-list__citys-item" data-city-id="3710">威海</li>
+					<li class="city-list__citys-item" data-city-id="4201">武汉</li>
+					<li class="city-list__citys-item" data-city-id="6501">乌鲁木齐</li>
+				</ul>
+			</dd>
+			<dt class="city-list__index" data-city-group="X">X</dt>
+			<dd class="city-list__citys-box">
+				<ul>
+					<li class="city-list__citys-item" data-city-id="142301">孝义</li>
+					<li class="city-list__citys-item" data-city-id="3203">徐州</li>
+					<li class="city-list__citys-item" data-city-id="321281">兴化(泰州)</li>
+					<li class="city-list__citys-item" data-city-id="330624">新昌(绍兴)</li>
+					<li class="city-list__citys-item" data-city-id="3502">厦门</li>
+					<li class="city-list__citys-item" data-city-id="4303">湘潭</li>
+					<li class="city-list__citys-item" data-city-id="6101">西安</li>
+					<li class="city-list__citys-item" data-city-id="6104">咸阳</li>
+					<li class="city-list__citys-item" data-city-id="6301">西宁</li>
+					<li class="city-list__citys-item" data-city-id="V5579">新加坡</li>
+				</ul>
+			</dd>
+			<dt class="city-list__index" data-city-group="Y">Y</dt>
+			<dd class="city-list__citys-box">
+				<ul>
+					<li class="city-list__citys-item" data-city-id="1427">运城</li>
+					<li class="city-list__citys-item" data-city-id="2108">营口</li>
+					<li class="city-list__citys-item" data-city-id="320282">宜兴</li>
+					<li class="city-list__citys-item" data-city-id="3209">盐城</li>
+					<li class="city-list__citys-item" data-city-id="3210">扬州</li>
+					<li class="city-list__citys-item" data-city-id="321019">仪征(扬州)</li>
+					<li class="city-list__citys-item" data-city-id="321182">扬中(镇江)</li>
+					<li class="city-list__citys-item" data-city-id="330782">义乌</li>
+					<li class="city-list__citys-item" data-city-id="3706">烟台</li>
+					<li class="city-list__citys-item" data-city-id="4306">岳阳</li>
+					<li class="city-list__citys-item" data-city-id="4565">永川</li>
+					<li class="city-list__citys-item" data-city-id="5115">宜宾</li>
+					<li class="city-list__citys-item" data-city-id="6127">榆林</li>
+					<li class="city-list__citys-item" data-city-id="6401">银川</li>
+				</ul>
+			</dd>
+			<dt class="city-list__index" data-city-group="Z">Z</dt>
+			<dd class="city-list__citys-box">
+				<ul>
+					<li class="city-list__citys-item" data-city-id="1307">张家口</li>
+					<li class="city-list__citys-item" data-city-id="320582">张家港</li>
+					<li class="city-list__citys-item" data-city-id="3211">镇江</li>
+					<li class="city-list__citys-item" data-city-id="330681">诸暨(绍兴)</li>
+					<li class="city-list__citys-item" data-city-id="3309">舟山</li>
+					<li class="city-list__citys-item" data-city-id="3506">漳州</li>
+					<li class="city-list__citys-item" data-city-id="3703">淄博</li>
+					<li class="city-list__citys-item" data-city-id="3704">枣庄</li>
+					<li class="city-list__citys-item" data-city-id="4101">郑州</li>
+					<li class="city-list__citys-item" data-city-id="4302">株洲</li>
+					<li class="city-list__citys-item" data-city-id="440183">增城(广州)</li>
+					<li class="city-list__citys-item" data-city-id="4404">珠海</li>
+					<li class="city-list__citys-item" data-city-id="4420">中山市</li>
+					<li class="city-list__citys-item" data-city-id="5203">遵义</li>
+				</ul>
+			</dd>
+		</dl>
+	</div>
+	<div class="city-list-group" data-is="city-list-group" riot-tag="city-list-group">
+		<ul>
+			<li> <a data-city-group="B" href="javascript:;" class="active">B</a> </li>
+			<li> <a data-city-group="C" href="javascript:;">C</a> </li>
+			<li> <a data-city-group="D" href="javascript:;">D</a> </li>
+			<li> <a data-city-group="E" href="javascript:;">E</a> </li>
+			<li> <a data-city-group="F" href="javascript:;">F</a> </li>
+			<li> <a data-city-group="G" href="javascript:;">G</a> </li>
+			<li> <a data-city-group="H" href="javascript:;">H</a> </li>
+			<li> <a data-city-group="J" href="javascript:;">J</a> </li>
+			<li> <a data-city-group="K" href="javascript:;">K</a> </li>
+			<li> <a data-city-group="L" href="javascript:;">L</a> </li>
+			<li> <a data-city-group="M" href="javascript:;">M</a> </li>
+			<li> <a data-city-group="N" href="javascript:;">N</a> </li>
+			<li> <a data-city-group="P" href="javascript:;">P</a> </li>
+			<li> <a data-city-group="Q" href="javascript:;">Q</a> </li>
+			<li> <a data-city-group="R" href="javascript:;">R</a> </li>
+			<li> <a data-city-group="S" href="javascript:;">S</a> </li>
+			<li> <a data-city-group="T" href="javascript:;">T</a> </li>
+			<li> <a data-city-group="W" href="javascript:;">W</a> </li>
+			<li> <a data-city-group="X" href="javascript:;">X</a> </li>
+			<li> <a data-city-group="Y" href="javascript:;">Y</a> </li>
+			<li> <a data-city-group="Z" href="javascript:;">Z</a> </li>
+		</ul>
+	</div>
+	<script src="common.js"></script>
+	<script>
+    var ndoo = {
+      vars: {
+      }
+    };
+  </script>
+</body>
+
+</html>

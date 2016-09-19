@@ -32,7 +32,6 @@ Object.keys(entries).forEach(function(name){
   }catch(e){
     demotpl = './template.html'
   }
-  console.log(demotpl);
   let plugin = new HtmlWebpackPlugin({
     filename: name + '.html',
     template: demotpl,

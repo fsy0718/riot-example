@@ -5,10 +5,10 @@ require('./city-list.css');
   <dl>
     <h3 show={showFixedActiveGroupIndex} class="city-list__current-index">{getActionGroup().index}</h3>
     <virtual each={citys, index in cityGroups}>
-    <dt class="city-list__index" if={citys.citys.length}>{citys.index}</dt>
+    <dt class="city-list__index" data-city-group={citys.index} if={citys.citys.length}>{citys.index}</dt>
     <dd if={citys.citys.length} class="city-list__citys-box">
       <ul>
-        <li class="city-list__citys-item" onclick={handleGroupItemClick} each={city, index in citys.citys}>{city.CityName}</li>
+        <li class="city-list__citys-item" data-city-id={city.CityID} onclick={handleGroupItemClick} each={city, index in citys.citys}>{city.CityName}</li>
       </ul>
     </dd>
     </virtual>
@@ -55,11 +55,16 @@ require('./city-list.css');
       }else{
         tag.showFixedActiveGroupIndex = false;
       }
-      tag.update();
+      //此处的调用逻辑为在scrollHandler中不管groupIndex是否变化，都会调用update
+      //如果用同步更新，可能导致模板中getActionGroup().index返回的是更新前的数据，故采用异步更新
+      setTimeout(function(){
+        tag.update();
+      },0)
 
     }
     //获取当前指定值的索引值区间
     var getCurrentGroupIndex = function(value){
+
       var i = 0, len = groupListMap.length;
       while(i < len){
         if(groupListMap[i].value > value){
@@ -99,7 +104,7 @@ require('./city-list.css');
 
 
     var scrollHandler = function(e){
-      if(tag.getActionGroup.trigger === 1){
+      if(tag.getActionGroup().trigger === 1){
         return;
       }
       clearTimeout(scrollThrottleTimer);
@@ -131,7 +136,7 @@ require('./city-list.css');
           _idx = _activeGroup.index;
           var _top = getGrouIndexPosHeight(_idx);
           $(scrollContainer).scrollTop(_top + pageScrollTop);
-
+          dispatchChangeActionGroupAction(_activeGroup.index, 0)
         }
         tag.activeGroupIndex = _activeGroup.index
       });
