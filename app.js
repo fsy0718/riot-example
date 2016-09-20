@@ -80,7 +80,15 @@ webpackConfig.plugins.push(plugin);
 
 const compiler = webpack(webpackConfig);
 const server = new WebpackDevServer(compiler, {
-  hot: true
+  hot: true,
+  setup: function(app){
+    app.get('/Basic/GetOverSeaCity', function(req, res){
+      fs.readFile(path.join(__dirname,'./src/mock/citylistoversea.json'),'utf8', function(err, data){
+        res.json(data);
+      })
+      //res.json({custom: 'response'});
+    })
+  }
 })
 
 server.listen(8000, 'localhost', function(err){
