@@ -24,7 +24,7 @@ $tabHeader.on('click', 'a', function () {
   $self.addClass('active').siblings('.active').removeClass('active');
   var index = $self.index('a');
   if (index === -1) {
-    cityListPure1.changePauseStatus(false);
+    cityListPure1.changePauseStatus(true);
     $list1.hide();
     $group1.hide();
     if (!cityListPure2) {
@@ -41,7 +41,8 @@ $tabHeader.on('click', 'a', function () {
           cityListPure2 = new CityListPure({
             groupContainer: $group2,
             listContainer: $list2,
-            CityList: data.CityList
+            CityList: data.CityList,
+            activeGroupIndex: 'A'
           });
           //更新缓存值
           $group2 = $('.city-list-group ul').eq(1);
@@ -52,18 +53,18 @@ $tabHeader.on('click', 'a', function () {
     } else {
       $list2.show();
       $group2.show();
-      cityListPure2.changePauseStatus(true);
+      cityListPure2.changePauseStatus(false);
     }
   } else {
-    cityListPure2.changePauseStatus(false);
+    cityListPure2.changePauseStatus(true);
     $list1.show();
     $group1.show();
     $list2.hide();
     $group2.hide();
-    cityListPure1.changePauseStatus(true);
+    cityListPure1.changePauseStatus(false);
   }
 
 })
 
 window.cityListPure1 = cityListPure1;
-console.log(CityListPure.__instances__)
+window.CityListPure = CityListPure;

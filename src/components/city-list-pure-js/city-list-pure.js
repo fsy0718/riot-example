@@ -7,26 +7,27 @@ var CityListPure = function (options) {
   //缓存常用变量
   this.$group = $(this.options.groupContainer || '.city-list-group');
   this.$list = $(this.options.listContainer || '.city-list');
-  this.$fixedIndex = $(this.options.fixedIndexContainer || '.city-list__current-index');
+  this.$fixedIndex = this.options.fixedIndexContainer && $(this.options.fixedIndexContainer) || this.$list.find('.city-list__current-index');
   this.$scrollContainer = $(this.options.container || window);
   this.initState();
   this.paused = this.options.paused || false;
   if (!this.$group.length) {
     var dom = this.createGroupDOMFromData();
     this.$group = $(dom).appendTo('.city-list-group');
+    this.$group.find('[data-city-group="' + this.state.activeGroup.index + '"]').addClass('active');
   }
   if (!this.$list.length) {
     var dom = this.createListDOMFromData();
     this.$list = $(dom).appendTo('.city-list');
+    this.$fixedIndex = this.$list.find('.city-list__current-index');
   }
   this.setFixedGroupIndexWidth();
   this.calcGroupListMap();
 
   CityListPure.__instances__ ? null : CityListPure.__instances__ = {};
   this.__id__ = this.getInstanceId();
-  CityListPure.__instances__[this.__id__] = {paused: this.paused};
+  CityListPure.__instances__[this.__id__] = { paused: this.paused };
   this.initEvent();
-  console.log(this);
 }
 CityListPure.prototype = {
   //初始化城市数据
@@ -179,28 +180,20 @@ CityListPure.prototype = {
     return 0;
   },
   setActiveGroup: function (index, trigger) {
-    console.log(index, trigger);
     if (index !== this.state.activeGroup.index) {
+      this.state.activeGroup = {
+        index: index,
+        trigger: trigger
+      };
+      this.changeFixedActiveGroupIndex();
+      //更改相关状态
+      this.changeCityGroupIndex();
       if (trigger === 1) {
         var _top = this.getGrouIndexPosHeight(index);
         this.$scrollContainer.scrollTop(_top + this.__domData.pageScrollTop);
-        this.state.activeGroup = {
-          index: index,
-          trigger: 0
-        }
-      } else {
-        this.state.activeGroup = {
-          index: index,
-          trigger: trigger
-        };
       }
-
-      //更改相关状态
-      this.changeFixedActiveGroupIndex();
-      this.changeCityGroupIndex();
     }
-
-
+    console.log(3, this.state.activeGroup);
   },
   queryCityByGroup: function (index, cityId) {
     var result = _.find(this.state.cityGroups, { index: index });
@@ -217,21 +210,25 @@ CityListPure.prototype = {
   changePauseStatus: function (isPause) {
     this.paused = Boolean(isPause);
     CityListPure.__instances__[this.__id__].paused = this.paused;
-    if(this.paused){
+    if (this.paused) {
       this.$scrollContainer.off('scroll', CityListPure.__instances__[this.__id__].fn);
-    }else{
+    } else {
       this.$scrollContainer.on('scroll', CityListPure.__instances__[this.__id__].fn);
     }
-    
+
   },
   _scrollHandler: function (e) {
     var scrollThrottleTimer = null;
+    console.log(2, this.state.activeGroup);
     var self = this;
-    console.log(self.state.cityGroupIndexs);
     if (self.paused) {
       return;
     }
     if (self.state.activeGroup.trigger === 1) {
+      this.state.activeGroup = {
+        index: this.state.activeGroup.index,
+        trigger: 0
+      }
       return;
     }
     clearTimeout(scrollThrottleTimer);
@@ -263,6 +260,7 @@ CityListPure.prototype = {
       if (activeGroup !== self.state.activeGroup.index) {
         self.setActiveGroup(activeGroup, 1)
       }
+      console.log(1, self.state.activeGroup);
     }
     self.$list.on('click', '.city-list__citys-item', handleGroupItemClick);
   },
