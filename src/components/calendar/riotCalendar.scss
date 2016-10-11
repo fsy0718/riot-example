@@ -1,6 +1,6 @@
-@import '../var2016';
+@import "var2016.scss";
 
-[riot-calendar]{
+[riot-tag="riot-calendar"]{
   .pure-u-1-8 {
     width: 14.285%;
     text-align: center;
@@ -64,7 +64,7 @@
     margin-left: -16px;
     background-color: $main-color;
 
-    @include border-radius(50%);
+    border-radius: 50%;
 
     color: #fff;
 

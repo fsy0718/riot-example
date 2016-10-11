@@ -1,3 +1,6 @@
+require('./riotCalendar.css');
+require('../../common/css/pure-min.css');
+
 <riot-calendar>
 	<div class="calendar">
 		<div class="calendar__head">
@@ -23,7 +26,7 @@
 		<script>
       tag = this;
 
-      tag.firstDay = Number(tag.opts.firstDay) || 0;
+      var firstDay = Number(tag.opts.firstDay) || 0;
       /*
         opts说明
         autoOk:                 boolean 是否自动保存
@@ -38,6 +41,7 @@
         firstDay:               Number  每周的第一天
         rangeDates:             Array   选中的集合
         selectDates:            Array   选中的日期
+        changeByOtherDate:      Boolean 表示点击其它月份是否切换日历
       */
       //一些帮助函数
       //天数
@@ -55,12 +59,12 @@
         var firstDayInMonth = getFirstDateInMonth(y,m).getDay();
         var dates = 0;
         if(~firstDayInMonth){
-          if(firstDayInMonth > tag.firstDay){
-            dates = firstDayInMonth - tag.firstDay
-          }else if(firstDayInMonth === tag.firstDay){
+          if(firstDayInMonth > firstDay){
+            dates = firstDayInMonth - firstDay
+          }else if(firstDayInMonth === firstDay){
             dates = 0;
           }else{
-            dates = 6 - tag.firstDay + 1 + firstDayInMonth;
+            dates = 6 - firstDay + 1 + firstDayInMonth;
           }
         }
         return dates;
@@ -78,7 +82,7 @@
       }
 
       var getWeekTitles = function(){
-        tag.weekTitles = weekTitles.slice(tag.firstDay,7).concat(weekTitles.slice(0,tag.firstDay));
+        tag.weekTitles = weekTitles.slice(firstDay,7).concat(weekTitles.slice(0,firstDay));
       }
       var str2 = function(d){
         return (d > 9 ? ''  : '0') + d;
@@ -125,12 +129,6 @@
 
         var rs = formatDate2(tag.rangeDates[0]);
         var re = formatDate2(tag.rangeDates[1]);
-        var selectDates = [];
-        if(tag.selectDates.length){
-          tag.selectDates.forEach(function(date){
-            selectDates.push(formatDate2(date));
-          })
-        }
         var mulSelect = 0;
         var c2 = c3 = 0; 
         while(i < weekNum){
@@ -157,16 +155,17 @@
             }
             var _date = new Date(_y, _m - 1, _d);
             /*
-              current:    Number 表示月份  -1  前一个月  0  当前月 1 后一个月
-              date:       Date  当前日期
-              y:          Number 年份
-              m:          Number 月份
-              d:          Number 日
-              w:          Number 星期
-              dateformat: String 当前日期格式化字符串
-              range:      Number 表示范围选择  -1  表示范围开始  0 表示范围中   1 表示范围结束
-              select:     Number 表示是否被选中 0 未选中  1表示选中
-              valid:     Number 表示是否可用   0 不可用  1 表示可用
+              current:            Number 表示月份  -1  前一个月  0  当前月 1 后一个月
+              date:               Date  当前日期
+              y:                  Number 年份
+              m:                  Number 月份
+              d:                  Number 日
+              w:                  Number 星期
+              dateformat:         String 当前日期格式化字符串
+              range:              Number 表示范围选择  -1  表示范围开始  0 表示范围中   1 表示范围结束
+              select:             Number 表示是否被选中 0 未选中  1表示选中
+              valid:              Number 表示是否可用   0 不可用  1 表示可用
+
             */
             var r = {
               current: _c,
@@ -192,21 +191,21 @@
               }
             }
             //被选中
-            if((tag.opts.isMultiple || !mulSelect) && selectDates.indexOf(r.dateformat) !== -1){
+            if((tag.opts.isMultiple || !mulSelect) && selectDates[r.dateformat]){
               r.select = 1
               ++mulSelect
             }else{
               r.select = 0;
             }
-            if(!tag.minDateStr && !tag.maxDateStr && !r.current){
+            if(!minDateStr && !maxDateStr && !r.current){
               r.valid = 1;
-            }else if(tag.minDateStr && !r.current){
-              if(!tag.maxDateStr){
-                if(r.dateformat > tag.minDateStr){
+            }else if(minDateStr && !r.current){
+              if(!maxDateStr){
+                if(r.dateformat > minDateStr){
                   r.valid = 1
                 }
               }else{
-                if(r.dateformat > tag.minDateStr && r.dateformat < tag.maxDateStr){
+                if(r.dateformat > minDateStr && r.dateformat < maxDateStr){
                   r.valid = 1
                 }
               }
@@ -251,9 +250,13 @@
       }
       //范围选择
       tag.rangeDates = tag.opts.rangeDates || [];
-      tag.minDateStr = formatDate2(tag.opts.minDate || '');
-      tag.maxDateStr = formatDate2(tag.opts.maxDate || '');
-      tag.selectDates = tag.opts.selectDates || [];
+      var minDateStr = formatDate2(tag.opts.minDate || '');
+      var maxDateStr = formatDate2(tag.opts.maxDate || '');
+      var _selectDates = tag.opts.selectDates || [];
+      var selectDates = {};
+      _selectDates.forEach(function(date){
+        selectDates[formatDate2(date)] = date;
+      })
       tag.parseDateClass = function(date){
         if(!date){
           return false;
@@ -266,22 +269,41 @@
       getWeekTitles();
 
       tag.on('update', function(){
-        console.log(tag.rangeDates);
         var _d = getCalendarViewDate(curY, curM);
         tag.curData = {
           title: curY + '年' + curM + '月',
-          weekdates: _d.weekDates
+          weekdates: _d.weekDates,
+          viewdates: _d.viewDates
         }
       })
-
+      //TODO 增加判断如果小于最小值，则不能切换到别的月份
       tag.checkDate = function(e){
         var date = e.item.date;
-        console.log(e.item.date.dateformat)
+        
+        if(!date.valid){
+          
+          return;
+        }
         if(tag.opts.isRange){
-          if(tag.rangeDates.length === 2 || date.dateformat < formatDate2(tag.rangeDates[0])){
+          if(tag.rangeDates.length === 1 && date.range === -1){
+            tag.rangeDates = [];
+          }
+          else if(tag.rangeDates.length === 2 || date.dateformat < formatDate2(tag.rangeDates[0])){
             tag.rangeDates = [date.date]
           }else{
             tag.rangeDates.push(date.date);
+          }
+        }else{
+          if(date.select){
+            delete selectDates[date.dateformat];
+          }else{
+            if(!tag.opts.isMultiple){
+              selectDates = {};
+              selectDates[date.dateformat] = date.date;
+            }else{
+              selectDates[date.dateformat] = date.date
+            }
+            
           }
         }
       }

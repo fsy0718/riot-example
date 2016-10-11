@@ -1,0 +1,74 @@
+[riot-tag="riot-calendar"] {
+  /*.curr {
+    color: $high-link-text;
+  }*/ }
+  [riot-tag="riot-calendar"] .pure-u-1-8 {
+    width: 14.285%;
+    text-align: center; }
+  [riot-tag="riot-calendar"] .week {
+    font-size: 0.84375rem;
+    color: #666666;
+    line-height: 2.34375rem;
+    position: relative; }
+    [riot-tag="riot-calendar"] .week:after {
+      position: absolute;
+      content: '';
+      width: 90.625%;
+      height: 1px;
+      background-color: #efebea;
+      opacity: 0.97;
+      left: 4.6875%;
+      bottom: 0;
+      z-index: 2; }
+  [riot-tag="riot-calendar"] .month {
+    color: #333333;
+    line-height: 1.3125rem;
+    font-size: 0.875rem;
+    margin-top: 0.8125rem; }
+  [riot-tag="riot-calendar"] .day {
+    height: 32px;
+    line-height: 2rem;
+    text-align: center;
+    color: #c5c5c5; }
+    [riot-tag="riot-calendar"] .day i {
+      font-style: normal; }
+    [riot-tag="riot-calendar"] .day span {
+      display: none; }
+  [riot-tag="riot-calendar"] .enable {
+    color: #393836; }
+  [riot-tag="riot-calendar"] .pure-u-1-8 {
+    position: relative; }
+  [riot-tag="riot-calendar"] .choice {
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    margin-left: -16px;
+    background-color: #7f1f59;
+    border-radius: 50%;
+    color: #fff;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+    line-height: 2rem;
+    display: inline-block; }
+  [riot-tag="riot-calendar"] .high {
+    background-color: #eee2e9; }
+    [riot-tag="riot-calendar"] .high .day.enable {
+      color: #fff; }
+  [riot-tag="riot-calendar"] .checkoutrange {
+    font-weight: bold; }
+  [riot-tag="riot-calendar"] .rangeStart:before, [riot-tag="riot-calendar"] .rangeEnd:before {
+    width: 50%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    background-color: #eee2e9;
+    content: ""; }
+  [riot-tag="riot-calendar"] .rangeEnd:before {
+    left: 0; }
+
+/*# sourceMappingURL=riotCalendar.css.map */
