@@ -1,11 +1,15 @@
+require('../../common/css/pure-min.css');
+require('./riotCalendar.css');
+
 <riot-calendar>
 	<div class="calendar">
 		<div class="calendar__head">
 			<div class="pure-g control">
 				<a class="pure-u-1-5 prev {prevMonthDisable && 'disable'}" href="javascript:;" onclick={prevMonth} ><i></i></a>
           <div class="pure-u-3-5 title">
-            <span>{curData.title}</span>
-            <span if={otherData}>{otherData.title}</span>
+            <div if={otherData} class="title__other">{otherData.title}</div>
+            <div class="title__cur">{curData.title}</div>
+
           </div>
           <a class="pure-u-1-5 next {nextMonthDisable && 'disable'}" href="javascript:;" onclick={nextMonth}><i></i></a>
 			</div>
@@ -24,7 +28,7 @@
       <div class="calendar__body--cur">
         <div class="pure-g" each={weekdates in curData.weekdates}>
           <div class="pure-u-1-8 {parseDateClass(date)}" each={date in weekdates}>
-            <div class="day {date.valid === 0 && 'enable' || 'disable'} {date.select === 1 && 'choice'}"  onclick={checkDate}>{date.d}</div>
+            <div class="day {date.valid === 0 && 'enable' || 'disable'} {date.select === 1 && 'choice'}"  onclick={checkDate}>{date.d}<i if={date.select === 1}></i></div>
           </div>
         </div>
       </div>
@@ -56,6 +60,8 @@
         showOtherMonthDay:               Boolean 是否显示其它月的日期
 
         switchWithAnimation:             Boolean 切换时是否需要动画
+        animationTimingFunction:         String 动画函数 cubic-bezier(0.445, 0.05, 0.55, 0.95)
+        animationDuration:               动画待续时间  默认为0.45s
 
       */
       //一些帮助函数
@@ -384,9 +390,68 @@
             tag.nextMonthDisable = false;
           }
         }
-      })
+      });
+      var timer = null;
       tag.on('updated', function(){
-
+        if(tag.opts.switchWithAnimation && switchDirection){
+          var $cur = tag.root.querySelector('.calendar__body--cur');
+          var $curT = tag.root.querySelector('.title__cur');
+          var $other = tag.root.querySelector('.calendar__body--other');
+          var $otherT = tag.root.querySelector('.title__other');
+          if(tag.opts.animationTimingFunction){
+            $cur.style.webkitAnimationTimingFunction = tag.opts.animationTimingFunction;
+            $other.style.webkitAnimationTimingFunction = tag.opts.animationTimingFunction;
+            $cur.style.animationTimingFunction = tag.opts.animationTimingFunction;
+            $other.style.animationTimingFunction = tag.opts.animationTimingFunction;  
+            $curT.style.webkitAnimationTimingFunction = tag.opts.animationTimingFunction;
+            $otherT.style.webkitAnimationTimingFunction = tag.opts.animationTimingFunction;
+            $curT.style.animationTimingFunction = tag.opts.animationTimingFunction;
+            $otherT.style.animationTimingFunction = tag.opts.animationTimingFunction;         
+          }
+          var duration = parseFloat(tag.opts.animationDuration) || 0.45;
+          var c1;
+          var c2;
+          if(duration !== 0.45){
+            _duration = '' + duration + 's';
+            $cur.style.webkitAnimationDuration = _duration;
+            $other.style.webkitAnimationDuration = _duration;
+            $cur.style.animationDuration = _duration;
+            $other.style.animationDuration = _duration;
+            $curT.style.webkitAnimationDuration = _duration;
+            $otherT.style.webkitAnimationDuration = _duration;
+            $curT.style.animationDuration = _duration;
+            $otherT.style.animationDuration = _duration;
+          }
+          if(switchDirection === 1){
+            c1 = 'calendar-fadeInRight';
+            c2 = 'calendar-fadeOutRight';
+          }else{
+            c1 = 'calendar-fadeInLeft';
+            c2 = 'calendar-fadeOutLeft'
+          }
+          $cur.classList.add('animation');
+          $cur.classList.add(c1);
+          $other.classList.add('animation');
+          $other.classList.add(c2);
+          $curT.classList.add('animation');
+          $curT.classList.add(c1);
+          $otherT.classList.add('animation');
+          $otherT.classList.add(c2);
+          clearTimeout(timer);
+          timer = setTimeout(function(){
+            tag.otherData = null;
+            $other.classList.remove('animation');
+            $other.classList.remove(c2);
+            $cur.classList.remove('animation');
+            $cur.classList.remove(c1);
+            $otherT.classList.remove('animation');
+            $otherT.classList.remove(c2);
+            $curT.classList.remove('animation');
+            $curT.classList.remove(c1);
+            clearTimeout(timer);
+            switchDirection = undefined;
+          }, duration * 1000)
+        }      
       })
       //TODO 增加判断如果小于最小值，则不能切换到别的月份
       tag.checkDate = function(e){
@@ -398,8 +463,9 @@
             }
           }else{
             e.preventUpdate = true;
+            return;
           }
-          return;
+          
         }
         if(tag.opts.isRange){
           if(rs && !re && rs === date.dateformat){
@@ -407,6 +473,8 @@
             selectDateStr = [];
             rs = undefined;
             re = undefined;
+            //做动画
+            e.srcElement.classList.add('riot-calendar-scaleOut')
           }else if(!rs || (rs && (rs > date.dateformat) || re)){
             selectDates = [date.date];
             selectDateStr = [date.dateformat];
@@ -419,9 +487,11 @@
           }
         }else{
           if(date.select){
+            e.srcElement.classList.add('riot-calendar-scaleOut')
             var i = selectDateStr.indexOf(date.dateformat);
             selectDateStr.splice(i,1);
             selectDates.splice(i,1);
+
           }else{
             if(!tag.opts.isMultiple){
               selectDateStr = [date.dateformat];

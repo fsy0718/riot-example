@@ -6,4 +6,6 @@ window.calendar = riot.mount(document.querySelector('.app'),'riot-calendar',{
     minDate: '2016-10-05',
     maxDate: '2016-11-02'*/
     //isMultiple: true
+    switchWithAnimation: true,
+    switchViewByOtherMonth: true
 });

@@ -23,10 +23,6 @@ module.exports = {
         // 加载器配置
         loaders: [
             {
-                test: /\.scss$/,
-                loader: ExtractTextPlugin.extract('style-loader','css-loader','sass-loader')
-            },
-            {
                 test: /\.css$/,
                 loader: ExtractTextPlugin.extract('style-loader','css-loader')
             },

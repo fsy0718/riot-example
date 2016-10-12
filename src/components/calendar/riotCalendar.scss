@@ -1,4 +1,4 @@
-@import '../var2016';
+@import './var2016';
 
 [riot-tag="riot-calendar"]{
   .pure-u-1-8 {
@@ -28,6 +28,9 @@
       color: $darkblack;
       font-size: rSize(26);
       line-height: 2;
+      position: relative;
+      height: rSize(26*2);
+      overflow: hidden;
     }
     .prev,.next{
       position: relative;
@@ -61,16 +64,47 @@
   }
   .calendar__body{
     padding: rSize(13) 0;
+    position: relative;
+    min-height: rSize((64 + 16) * 6);
     .pure-g{
       margin-top: rSize(16);
     }
   }
-  .calendar__body--cur,.calendar__body--other{
+  .calendar__body--cur,.calendar__body--other,.title__cur,.title__other{
     will-change: transform, opacity;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    background: #fff;
+    animation-play-state: paused;
+    animation-duration: 0.45s;
+    animation-fill-mode: forwards;
+    //animation-timing-function: cubic-bezier(0.445, 0.05, 0.55, 0.95);
+    animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+    &.calendar-fadeInLeft{
+      animation-name: riot-calendar-fadeInFromLeft;
+    }
+    &.calendar-fadeInRight{
+      animation-name: riot-calendar-fadeInFromRight;
+    }
+    &.calendar-fadeOutLeft{
+      animation-name: riot-calendar-fadeOutFromLeft;
+    }
+    &.calendar-fadeOutRight{
+      animation-name: riot-calendar-fadeOutFromRight;
+    }
+    &.animation{
+      animation-play-state: running;
+    }
   }
+  .calendar__body--cur,.calendar__body--other{
+    top: rSize(8);
+    height: 100%;
+  }
+  
   .day {
-    height: 32px;
-    line-height: r-size(32);
+    height: rSize(64);
+    line-height: rSize(64);
     text-align: center;
     color: $calendar-day-disable-color;
     i {
@@ -87,10 +121,6 @@
     color: $calendar-day-color;
   }
 
-  /*.curr {
-    color: $high-link-text;
-  }*/
-
   .pure-u-1-8 {
     position: relative;
   }
@@ -102,16 +132,34 @@
     z-index: 2;
     left: 50%;
     margin-left: -16px;
-    background-color: $main-color;
-
-    @include border-radius(50%);
 
     color: #fff;
-
     @include box-sizing;
 
     line-height: r-size(32);
     display: inline-block;
+    i{
+      width: 100%;
+      height: 100%;
+      @include border-radius(50%);
+      content: '';
+      background-color: $main-color;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      animation-name: riot-calendar-scaleIn;
+      animation-duration: 0.45s;
+      animation-fill-mode: forwards;
+      //animation-timing-function: cubic-bezier(0.445, 0.05, 0.55, 0.95);
+      animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+      will-change: transform, opacity;
+    }
+    &.riot-calendar-scaleOut{
+      i{
+        animation-name: riot-calendar-scaleOut;
+      }
+    }
   }
 
   .high {
@@ -141,5 +189,66 @@
     &:before {
       left: 0;
     }
+  }
+}
+
+@keyframes riot-calendar-fadeInFromLeft {
+  0%{
+    transform: translateX(-100%);
+    opacity: 0
+  }
+  100%{
+    transform: translateX(0);
+    opacity: 1
+  }
+}
+@keyframes riot-calendar-fadeOutFromLeft {
+  0%{
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100%{
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+@keyframes riot-calendar-fadeInFromRight {
+  0%{
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100%{
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+@keyframes riot-calendar-fadeOutFromRight {
+  0%{
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100%{
+    transform: translateX(-100%);
+    opacity: 1;
+  }
+}
+@keyframes riot-calendar-scaleIn{
+  0%{
+    transform: scale(0);
+    opacity: 0;
+  }
+  100%{
+    transform: scale(1);
+    opacith: 1;
+  }
+}
+@keyframes riot-calendar-scaleOut{
+  0%{
+    transform: scale(1);
+    opacity: 1;
+  }
+  100%{
+    transform: scale(0);
+    opacity: 0
   }
 }
