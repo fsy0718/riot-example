@@ -1,14 +1,14 @@
-@import "var2016.scss";
+@import '../var2016';
 
 [riot-tag="riot-calendar"]{
   .pure-u-1-8 {
     width: 14.285%;
     text-align: center;
   }
-  .week{
-    font-size: rSize(27);
-    color: $midblack;
-    line-height: rSize(27 + 24 * 2);
+  .weeks{
+    font-size: rSize(26);
+    color: $darkblack;
+    line-height: rSize(26 + 22 * 2);
     position: relative;
     &:after{
       position: absolute;
@@ -22,11 +22,51 @@
       z-index: 2;
     } 
   }
-  .month {
-    color: $darkblack;
-    line-height: rSize(14 + 28);
-    font-size: rSize(28);
-    margin-top: rSize(26);
+  .control{
+    text-align: center;
+    .title{
+      color: $darkblack;
+      font-size: rSize(26);
+      line-height: 2;
+    }
+    .prev,.next{
+      position: relative;
+      i{
+        position: absolute;
+        width: rSize(16);
+        height: rSize(16);
+        top: 50%;
+        left: 50%;
+        margin-top: -1 * rSize(8);
+        margin-left: -1 * rSize(8);
+        border: {
+          top: none;
+          right: none;
+          left: 2px solid $main-color;
+          bottom: 2px solid $main-color;
+        }
+      }
+      &.disable i{
+        border-left-color: $calendar-disable-arrow-color;
+        border-bottom-color: $calendar-disable-arrow-color;
+      }
+    }
+    .prev i{
+      transform: rotate(45deg);
+    }
+    .next i{
+      transform: rotate(-135deg);
+    }
+    margin-bottom: rSize(16);
+  }
+  .calendar__body{
+    padding: rSize(13) 0;
+    .pure-g{
+      margin-top: rSize(16);
+    }
+  }
+  .calendar__body--cur,.calendar__body--other{
+    will-change: transform, opacity;
   }
   .day {
     height: 32px;
@@ -64,7 +104,7 @@
     margin-left: -16px;
     background-color: $main-color;
 
-    border-radius: 50%;
+    @include border-radius(50%);
 
     color: #fff;
 
